@@ -1,6 +1,6 @@
 // components/ButtonClickAnimation.js
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,11 +8,12 @@ import {
   Animated,
   Dimensions,
   PixelRatio,
+  Appearance,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import PropTypes from 'prop-types';
 
-import {darkTheme, lightTheme, animationDuration} from './constants';
+import {darkTheme, lightTheme} from './constants';
 import styles from './styles';
 
 const windowWidth = Dimensions.get('window').width;
@@ -50,56 +51,32 @@ ThemeSwitch.propTypes = {
 };
 
 const ButtonClickAnimation = () => {
-  const [animation] = useState(new Animated.Value(5));
-  const [isMoving, setIsMoving] = useState(false);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(darkTheme);
 
+  useEffect(() => {
+    const colorScheme = Appearance.getColorScheme();
+    if (colorScheme === 'dark') {
+      setCurrentTheme(darkTheme);
+    } else {
+      setCurrentTheme(lightTheme);
+    }
+  }, []);
+
   const toggleSwitch = () => {
-    // Toggle the state of the switch
     setIsSwitchOn(!isSwitchOn);
     const newTheme = isSwitchOn ? darkTheme : lightTheme;
     setCurrentTheme(newTheme);
-    moveView();
-  };
-
-  const moveView = () => {
-    setIsMoving(!isMoving);
-    const toValue = isMoving ? 5 : 1;
-    Animated.timing(animation, {
-      toValue,
-      duration: animationDuration,
-      useNativeDriver: false,
-    }).start();
   };
 
   return (
     <>
       <View
-        style={{
-          position: 'absolute',
-          alignItems: 'flex-end',
-          justifyContent: 'flex-end',
-          width: windowWidth - 20,
-          height: 80,
-        }}>
-        <Animated.View
-          style={[
-            styles.box,
-            {
-              transform: [
-                { scaleX: animation.interpolate({ inputRange: [1, 5], outputRange: [1, 2000] }) }, // Vary scaleX between 1 and 2
-                { scaleY: animation.interpolate({ inputRange: [1, 5], outputRange: [1, 2000] }) }, // Vary scaleY between 1 and 3
-              ],
-            },
-          ]}
-        />
-      </View>
-      <View
         style={[
           styles.container,
           {
             flexDirection: 'column',
+            backgroundColor: currentTheme.containerBackgroundColor,
           },
         ]}>
         <View style={styles.headingColumnContainer}>
@@ -117,41 +94,41 @@ const ButtonClickAnimation = () => {
             style={{
               width: PixelRatio.getPixelSizeForLayoutSize(90),
               height: PixelRatio.getPixelSizeForLayoutSize(90),
-              borderColor: currentTheme.containerBackgroundColor,
+              borderColor: currentTheme.containerViewColor,
               borderWidth: 2,
             }}></View>
           <View style={{flexDirection: 'column'}}>
             <View
               style={[
                 styles.bodyMainContainer,
-                {borderColor: currentTheme.containerBackgroundColor},
+                {borderColor: currentTheme.containerViewColor},
               ]}></View>
             <View
               style={[
                 styles.bodySubContainer,
                 {
-                  borderColor: currentTheme.containerBackgroundColor,
+                  borderColor: currentTheme.containerViewColor,
                 },
               ]}></View>
             <View
               style={[
                 styles.bodySubContainer,
                 {
-                  borderColor: currentTheme.containerBackgroundColor,
+                  borderColor: currentTheme.containerViewColor,
                 },
               ]}></View>
             <View
               style={[
                 styles.bodySubContainer,
                 {
-                  borderColor: currentTheme.containerBackgroundColor,
+                  borderColor: currentTheme.containerViewColor,
                 },
               ]}></View>
             <View
               style={[
                 styles.bodySubContainer,
                 {
-                  borderColor: currentTheme.containerBackgroundColor,
+                  borderColor: currentTheme.containerViewColor,
                 },
               ]}></View>
           </View>
@@ -161,28 +138,28 @@ const ButtonClickAnimation = () => {
             style={[
               styles.bottomContainer,
               {
-                borderColor: currentTheme.containerBackgroundColor,
+                borderColor: currentTheme.containerViewColor,
               },
             ]}></View>
           <View
             style={[
               styles.bottomContainer,
               {
-                borderColor: currentTheme.containerBackgroundColor,
+                borderColor: currentTheme.containerViewColor,
               },
             ]}></View>
           <View
             style={[
               styles.bottomContainer,
               {
-                borderColor: currentTheme.containerBackgroundColor,
+                borderColor: currentTheme.containerViewColor,
               },
             ]}></View>
           <View
             style={[
               styles.bottomContainer,
               {
-                borderColor: currentTheme.containerBackgroundColor,
+                borderColor: currentTheme.containerViewColor,
               },
             ]}></View>
         </View>

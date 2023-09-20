@@ -1,16 +1,16 @@
 // constants.js
 
 export const darkTheme = {
-    containerBackgroundColor: 'white',
+    containerBackgroundColor: 'black',
+    containerViewColor: 'white',
     textColor: 'white',
     switchButtonBackgroundColor: '#ccc',
   };
   
   export const lightTheme = {
-    containerBackgroundColor: 'black',
+    containerBackgroundColor: 'white',
+    containerViewColor: 'black',
     textColor: 'black',
     switchButtonBackgroundColor: '#ccc',
   };
-  
-  export const animationDuration = 500;
-  
+    
