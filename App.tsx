@@ -50,7 +50,7 @@ ThemeSwitch.propTypes = {
 };
 
 const ButtonClickAnimation = () => {
-  const [animation] = useState(new Animated.Value(0));
+  const [animation] = useState(new Animated.Value(5));
   const [isMoving, setIsMoving] = useState(false);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(darkTheme);
@@ -65,7 +65,7 @@ const ButtonClickAnimation = () => {
 
   const moveView = () => {
     setIsMoving(!isMoving);
-    const toValue = isMoving ? 0 : windowWidth;
+    const toValue = isMoving ? 5 : 1;
     Animated.timing(animation, {
       toValue,
       duration: animationDuration,
@@ -79,12 +79,18 @@ const ButtonClickAnimation = () => {
         style={{
           position: 'absolute',
           alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          width: windowWidth - 20,
+          height: 80,
         }}>
         <Animated.View
           style={[
             styles.box,
             {
-              transform: [{translateX: animation}],
+              transform: [
+                { scaleX: animation.interpolate({ inputRange: [1, 5], outputRange: [1, 2000] }) }, // Vary scaleX between 1 and 2
+                { scaleY: animation.interpolate({ inputRange: [1, 5], outputRange: [1, 2000] }) }, // Vary scaleY between 1 and 3
+              ],
             },
           ]}
         />

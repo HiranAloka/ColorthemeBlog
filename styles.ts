@@ -20,9 +20,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   box: {
-    width: windowWidth,
-    height: windowHeight,
+    width: 1,
+    height: 1,
     backgroundColor: 'black',
+    borderRadius: 50
   },
   switchButton: {
     width: 50,
