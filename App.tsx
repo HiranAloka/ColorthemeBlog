@@ -1,172 +1,152 @@
-// components/ButtonClickAnimation.js
-
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Animated,
-  Dimensions,
-  PixelRatio,
-  Appearance,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import React from 'react';
+import {View, Text, ScrollView, Image, useWindowDimensions} from 'react-native';
 import PropTypes from 'prop-types';
-
 import {darkTheme, lightTheme} from './constants';
 import styles from './styles';
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-
-interface ThemeSwitchProps {
-  isSwitchOn: boolean;
-  toggleSwitch: () => void;
+interface Theme {
+  containerBackgroundColor: string;
+  textColor: string;
+  containerViewColor: string;
 }
-const ThemeSwitch: React.FC<ThemeSwitchProps> = ({
-  isSwitchOn,
-  toggleSwitch,
-}) => {
-  return (
-    <View
-      style={{
-        position: 'absolute',
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end',
-        height: PixelRatio.getPixelSizeForLayoutSize(32),
-        width: windowWidth,
-      }}>
-      <TouchableOpacity
-        style={[styles.switchButton, isSwitchOn && styles.activeSwitch]}
-        onPress={toggleSwitch}>
-        <Icon name={isSwitchOn ? 'moon' : 'sun'} size={24} color="white" />
-      </TouchableOpacity>
-    </View>
-  );
-};
 
-ThemeSwitch.propTypes = {
-  isSwitchOn: PropTypes.bool.isRequired,
-  toggleSwitch: PropTypes.func.isRequired,
-};
+interface AppProps {}
 
-const ButtonClickAnimation = () => {
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState(darkTheme);
-
-  useEffect(() => {
-    const colorScheme = Appearance.getColorScheme();
-    if (colorScheme === 'dark') {
-      setCurrentTheme(darkTheme);
-    } else {
-      setCurrentTheme(lightTheme);
-    }
-  }, []);
-
-  const toggleSwitch = () => {
-    setIsSwitchOn(!isSwitchOn);
-    const newTheme = isSwitchOn ? darkTheme : lightTheme;
-    setCurrentTheme(newTheme);
-  };
-
+const App: React.FC<AppProps> = () => {
+  const currentTheme: Theme = lightTheme;
+  const isSmallFontScale: boolean = useWindowDimensions().fontScale < 1.7;
+  console.log(useWindowDimensions().fontScale);
   return (
     <>
-      <View
-        style={[
-          styles.container,
-          {
-            flexDirection: 'column',
-            backgroundColor: currentTheme.containerBackgroundColor,
-          },
-        ]}>
-        <View style={styles.headingColumnContainer}>
-          <View style={styles.subContainer}>
-            <Text style={[styles.title, {color: currentTheme.textColor}]}>
-              Welcome to My App
-            </Text>
-            <Text style={[styles.subtitle, {color: currentTheme.textColor}]}>
-              Explore and enjoy our content!
-            </Text>
-          </View>
+      <ScrollView>
+        <View
+          style={[
+            styles.container,
+            {
+              flexDirection: 'column',
+              backgroundColor: currentTheme.containerBackgroundColor,
+            },
+          ]}>
+          <HeadingSection currentTheme={currentTheme} />
+          <ImageSection
+            currentTheme={currentTheme}
+            isSmallFontScale={isSmallFontScale}
+          />
+          <InfoSection
+            currentTheme={currentTheme}
+            isSmallFontScale={isSmallFontScale}
+          />
         </View>
-        <View style={{flex: 2, justifyContent: 'center', flexDirection: 'row'}}>
-          <View
-            style={{
-              width: PixelRatio.getPixelSizeForLayoutSize(90),
-              height: PixelRatio.getPixelSizeForLayoutSize(90),
-              borderColor: currentTheme.containerViewColor,
-              borderWidth: 2,
-            }}></View>
-          <View style={{flexDirection: 'column'}}>
-            <View
-              style={[
-                styles.bodyMainContainer,
-                {borderColor: currentTheme.containerViewColor},
-              ]}></View>
-            <View
-              style={[
-                styles.bodySubContainer,
-                {
-                  borderColor: currentTheme.containerViewColor,
-                },
-              ]}></View>
-            <View
-              style={[
-                styles.bodySubContainer,
-                {
-                  borderColor: currentTheme.containerViewColor,
-                },
-              ]}></View>
-            <View
-              style={[
-                styles.bodySubContainer,
-                {
-                  borderColor: currentTheme.containerViewColor,
-                },
-              ]}></View>
-            <View
-              style={[
-                styles.bodySubContainer,
-                {
-                  borderColor: currentTheme.containerViewColor,
-                },
-              ]}></View>
-          </View>
-        </View>
-        <View style={{flex: 3, alignItems: 'center'}}>
-          <View
-            style={[
-              styles.bottomContainer,
-              {
-                borderColor: currentTheme.containerViewColor,
-              },
-            ]}></View>
-          <View
-            style={[
-              styles.bottomContainer,
-              {
-                borderColor: currentTheme.containerViewColor,
-              },
-            ]}></View>
-          <View
-            style={[
-              styles.bottomContainer,
-              {
-                borderColor: currentTheme.containerViewColor,
-              },
-            ]}></View>
-          <View
-            style={[
-              styles.bottomContainer,
-              {
-                borderColor: currentTheme.containerViewColor,
-              },
-            ]}></View>
-        </View>
-      </View>
-      <ThemeSwitch isSwitchOn={isSwitchOn} toggleSwitch={toggleSwitch} />
+      </ScrollView>
     </>
   );
 };
 
-export default ButtonClickAnimation;
+interface HeadingSectionProps {
+  currentTheme: Theme;
+}
+
+const HeadingSection: React.FC<HeadingSectionProps> = ({currentTheme}) => (
+  <View style={styles.headingColumnContainer}>
+    <View style={styles.subContainer}>
+      <Text style={[styles.title, {color: currentTheme.textColor}]}>
+        Spider Man
+      </Text>
+      <Text style={[styles.subtitle, {color: currentTheme.textColor}]}>
+        With great power comes great responsibility
+      </Text>
+    </View>
+  </View>
+);
+
+const ImageSection: React.FC<InfoSectionProps> = ({isSmallFontScale}) => (
+  <View
+    style={
+      isSmallFontScale && {flexDirection: 'row', justifyContent: 'center'}
+    }>
+    <View style={{alignItems: 'center'}}>
+      <Image style={styles.ImageStyle} source={require('./assets/test.jpg')} />
+    </View>
+    <View
+      style={[
+        {flexDirection: 'column', paddingVertical: 20},
+        isSmallFontScale && styles.maxWidth,
+      ]}>
+      <View style={styles.bodyMainContainer}>
+        <Text>Marvel Comics</Text>
+      </View>
+      <View style={styles.bodySubContainer}>
+        <Text>August 1962</Text>
+      </View>
+      <View style={[styles.bodySubContainer]}>
+        <Text> Queens, New York City</Text>
+      </View>
+      <View style={[styles.bodySubContainer]}>
+        <Text> Stan Lee Steve Ditko</Text>
+      </View>
+    </View>
+  </View>
+);
+
+interface InfoSectionProps {
+  currentTheme: Theme;
+  isSmallFontScale: boolean;
+}
+
+const InfoSection: React.FC<InfoSectionProps> = ({
+  currentTheme,
+  isSmallFontScale,
+}) => (
+  <View style={{alignItems: 'center'}}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      {infoData.map((info, index) => (
+        <InfoItem
+          key={index}
+          text={info}
+          currentTheme={currentTheme}
+          isSmallFontScale={isSmallFontScale}
+        />
+      ))}
+    </ScrollView>
+  </View>
+);
+
+interface InfoItemProps {
+  text: string;
+  currentTheme: Theme;
+  isSmallFontScale: boolean;
+}
+
+const InfoItem: React.FC<InfoItemProps> = ({
+  text,
+  currentTheme,
+  isSmallFontScale,
+}) => (
+  <View
+    style={[
+      styles.bottomContainer,
+      {
+        borderColor: currentTheme.containerViewColor,
+      },
+    ]}>
+    <Text>{text}</Text>
+  </View>
+);
+
+InfoItem.propTypes = {
+  text: PropTypes.string.isRequired,
+  currentTheme: PropTypes.shape({
+    containerBackgroundColor: PropTypes.string.isRequired,
+    textColor: PropTypes.string.isRequired,
+    containerViewColor: PropTypes.string.isRequired,
+  }).isRequired,
+  isSmallFontScale: PropTypes.bool.isRequired,
+};
+
+const infoData: string[] = [
+  'Spider-Man is a superhero appearing in American comic books published by Marvel Comics. Created by writer-editor Stan Lee and artist Steve Ditko, he first appeared in the anthology comic book Amazing Fantasy #15 (August 1962) in the Silver Age of Comic Books. He has been featured in comic books, television shows, films, video games, novels, and plays.',
+  "Spider-Man, aka Peter Parker, is a science whiz and freelance photographer. Balancing his life post a radioactive spider bite, he battles villains like Green Goblin and Doc Ock while navigating personal struggles. With his uncle's wisdom, he embraces the mantra of responsibility, embodying the friendly neighborhood hero.",
+  'Spider-Man, agile and quick-witted, navigates the city with web-shooters and inventive flair. His humor shines in tough times, making him a unique and beloved superhero.',
+];
+
+export default App;
