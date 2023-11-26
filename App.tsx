@@ -14,7 +14,7 @@ interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
   const currentTheme: Theme = lightTheme;
-  const isSmallFontScale: boolean = useWindowDimensions().fontScale < 1.7;
+  const isSmallFontScale: boolean = true;
   console.log(useWindowDimensions().fontScale);
   return (
     <>
